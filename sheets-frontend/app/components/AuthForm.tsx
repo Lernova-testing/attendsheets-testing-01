@@ -5,16 +5,12 @@ import { Mail, Lock, Eye, EyeOff, UserPlus, LogIn, GraduationCap, Users, CheckCi
 import { useAuth } from '@/lib/auth-context-email';
 import { PasswordResetModal } from './PasswordResetModal';
 import { DeviceRequestModal } from './DeviceRequestModal';
+import type { DeviceInfo } from '@/lib/deviceFingerprint';
 
 interface AuthFormProps {
   onModeChange?: (isSignUp: boolean) => void;
   setShowVerification: (show: boolean) => void;
   setVerificationEmail: (email: string) => void;
-}
-
-interface DeviceRequestPayload {
-  id: string;
-  [key: string]: unknown;
 }
 
 interface LoginApiResponse {
@@ -50,7 +46,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [showDeviceRequestModal, setShowDeviceRequestModal] = useState(false);
-  const [newDeviceInfo, setNewDeviceInfo] = useState<DeviceRequestPayload | null>(null);
+  const [newDeviceInfo, setNewDeviceInfo] = useState<DeviceInfo | null>(null);
   const [remainingDeviceRequests, setRemainingDeviceRequests] = useState(3);
   const [deviceRequestEmail, setDeviceRequestEmail] = useState('');
   const [deviceConsentGiven, setDeviceConsentGiven] = useState(false);
@@ -123,8 +119,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     
     try {
       // Get device fingerprint for students
-      let deviceId = null;
-      let deviceInfo = null;
+      let deviceId: string | null = null;
+      let deviceInfo: DeviceInfo | null = null;
       
       if (selectedRole === 'student') {
         const { getDeviceFingerprint } = await import('@/lib/deviceFingerprint');

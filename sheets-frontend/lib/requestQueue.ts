@@ -20,7 +20,7 @@ export interface QueueOptions {
 }
 
 class RequestQueue {
-  private queue: QueuedRequest<unknown>[] = [];
+  private queue: QueuedRequest<any>[] = [];
   private processing = false;
   private maxConcurrent: number;
   private activeRequests = 0;
@@ -112,7 +112,7 @@ class RequestQueue {
   /**
    * Execute a single request with retry logic
    */
-  private async executeRequest<T>(request: QueuedRequest<T>) {
+  private async executeRequest(request: QueuedRequest<any>) {
     try {
       const result = await request.execute();
       request.resolve(result);

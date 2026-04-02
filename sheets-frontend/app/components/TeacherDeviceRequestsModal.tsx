@@ -54,7 +54,13 @@ interface ConfirmationModal {
   type: 'approve' | 'reject' | 'delete' | null;
   title: string;
   message: string;
-  data?: DeviceRequest | { studentId: string; deviceId: string; studentName: string } | null;
+  data?: DeviceRequest | DeletePayload | null;
+}
+
+interface DeletePayload {
+  studentId: string;
+  deviceId: string;
+  studentName: string;
 }
 
 export const TeacherDeviceRequestsModal: React.FC<TeacherDeviceRequestsModalProps> = ({
@@ -217,7 +223,7 @@ export const TeacherDeviceRequestsModal: React.FC<TeacherDeviceRequestsModalProp
           setError(data.detail || 'Failed to process request');
         }
       } else if (confirmModal.type === 'delete') {
-        const { studentId, deviceId, studentName } = confirmModal.data;
+        const { studentId, deviceId } = confirmModal.data as DeletePayload;
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/teacher/student-devices/${studentId}/${deviceId}`,
           {

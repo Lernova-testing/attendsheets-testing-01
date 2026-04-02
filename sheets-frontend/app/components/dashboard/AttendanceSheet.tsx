@@ -508,7 +508,10 @@ export const AttendanceSheet: React.FC<AttendanceSheetProps> = ({
 
       // Custom columns
       activeClass.customColumns.forEach(col => {
-        row[col.label] = student[col.id] || '';
+        const customValue = student[col.id];
+        row[col.label] = (typeof customValue === 'string' || typeof customValue === 'number')
+          ? customValue
+          : '';
       });
 
       // Initialize totals
@@ -792,7 +795,7 @@ export const AttendanceSheet: React.FC<AttendanceSheetProps> = ({
             // Color day columns
             const isDayColumn = !isNaN(Number(header));
             if (isDayColumn) {
-              const status = cellValue.toString().charAt(0);
+              const status = String(cellValue ?? '').charAt(0);
 
               if (status === 'P') {
                 parsed.cell.styles.fillColor = [209, 250, 229];
@@ -1345,7 +1348,7 @@ export const AttendanceSheet: React.FC<AttendanceSheetProps> = ({
                       <td key={column.id} className="px-2 py-2 sm:px-4 sm:py-3 lg:px-6 lg:py-4" style={{ minWidth: '120px' }}>
                         {column.type === 'select' ? (
                           <select
-                            value={student[column.id] || ''}
+                            value={String(student[column.id] ?? '')}
                             onChange={(e) => onUpdateStudent(student.id, column.id, e.target.value)}
                             className="w-full text-xs sm:text-sm text-black bg-transparent focus:bg-white focus:ring-2 focus:ring-emerald-500 rounded-lg px-2 py-1 border border-transparent focus:border-emerald-500 transition-all"
                           >
@@ -1357,7 +1360,7 @@ export const AttendanceSheet: React.FC<AttendanceSheetProps> = ({
                         ) : (
                           <input
                             type={column.type}
-                            value={student[column.id] || ''}
+                            value={String(student[column.id] ?? '')}
                             onChange={(e) => onUpdateStudent(student.id, column.id, e.target.value)}
                             className="w-full text-xs sm:text-sm text-black bg-transparent focus:bg-white focus:ring-2 focus:ring-emerald-500 rounded-lg px-2 py-1 border border-transparent focus:border-emerald-500 transition-all cursor-text"
                             placeholder={`Enter ${column.label.toLowerCase()}`}
