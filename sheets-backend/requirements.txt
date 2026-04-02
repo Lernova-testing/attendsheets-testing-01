@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic[email]
+python-dotenv
+PyJWT
+pymongo
+dnspython
+user-agents
+sib-api-v3-sdk
