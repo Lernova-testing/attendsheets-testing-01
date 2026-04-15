@@ -546,7 +546,11 @@ export const AttendanceSheet: React.FC<AttendanceSheetProps> = ({
           let totalSessions = 0;
 
           // Parse the attendance data based on format
-          if (typeof dayAttendance === 'object' && 'sessions' in dayAttendance) {
+          if (
+            typeof dayAttendance === 'object' &&
+            'sessions' in dayAttendance &&
+            Array.isArray(dayAttendance.sessions)
+          ) {
             // NEW FORMAT: sessions array { sessions: [...], updated_at: "..." }
             dayAttendance.sessions.forEach((session: { status: 'P' | 'A' | 'L' }) => {
               totalSessions++;
@@ -1485,7 +1489,11 @@ export const AttendanceSheet: React.FC<AttendanceSheetProps> = ({
                       let hasMixedStatuses = false;
 
                       if (attendance) {
-                        if (typeof attendance === 'object' && 'sessions' in attendance) {
+                        if (
+                          typeof attendance === 'object' &&
+                          'sessions' in attendance &&
+                          Array.isArray(attendance.sessions)
+                        ) {
                           // NEW FORMAT: sessions array
                           const sessions = attendance.sessions;
                           const markedSessions = sessions.filter((s: { status?: 'P' | 'A' | 'L' | null }) => s.status !== null);
